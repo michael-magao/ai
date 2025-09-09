@@ -1,0 +1,768 @@
+2.1 Infinite AI agent
+AI agents have the capacity to interpret, predict, and respond based on its training and input data.
+While these capabilities are advanced and continually improving, it’s important to recognize their limitations and
+the influence of the underlying data they are trained on.
+
+AI agent systems generally possess the following abilities:
+1) Predictive Modeling: AI agents can predict likely outcomes or suggest next steps based on historical data and trends.
+For instance, they might predict the continuation of a text, the answer to a question, the next action for a robot,
+or the resolution of a scenario. （预测能力）
+
+2) Decision Making: In some applications, AI agents can make decisions based on their inferences. Generally, the agent
+will base their decision on what is most likely to achieve a specified goal. For AI applications like recommendation
+systems, an agent can decide what products or content to recommend based on its inferences about user preferences. （决策能力）
+
+3) Handling Ambiguity: AI agents can often handle ambiguous input by inferring the most likely interpretation based
+on context and training. However, their ability to do so is limited by the scope of their training data and algorithms.（歧义处理）
+
+4) Continuous Improvement: While some AI agents have the ability to learn from new data and interactions, many
+large language models do not continuously update their knowledge-base or internal representation after training. Their
+inferences are usually based solely on the data that was available up to the point of their last training update.
+（持续提升）
+
+We show augmented interactive agents for multi-modality and cross reality-agnostic integration （？？） with an emergence
+mechanism in Fig. 2. An AI agent requires collecting extensive training data for every new task, which can be costly or
+impossible for many domains. In this study, we develop an infinite agent that learns to transfer memory information from
+general foundation models (e.g., GPT-X, DALL-E) to novel domains or scenarios for scene understanding, generation, and
+interactive editing in physical or virtual worlds.
+
+An application of such an infinite agent in robotics is RoboGen (Wang et al., 2023d). In this study, the authors propose
+a pipeline that autonomously run the cycles of task proposition, environment generation, and skill learning. RoboGen is
+an effort to transfer the knowledge embedded in large models to robotics.
+
+2.2 Agent AI with Large Foundation Models
+Recent studies have indicated that large foundation models play a crucial role in creating data that act as benchmarks
+for determining the actions of agents within environment-imposed constraints. For example, using foundation models
+for robotic manipulation (Black et al., 2023; Ko et al., 2023) and navigation (Shah et al., 2023a; Zhou et al., 2023a). To
+illustrate, Black et al. employed an image-editing model as a high-level planner to generate images of future sub-goals,
+thereby guiding low-level policies (Black et al., 2023). For robot navigation, Shah et al. proposed a system that employs
+a LLM to identify landmarks from text and a VLM to associate these landmarks with visual inputs, enhancing navigation
+through natural language instructions (Shah et al., 2023a).（大型基础模型在智能体决策中起到关键作用，例如机器人操作和导航任务）
+
+There is also growing interest in the generation of conditioned human motions in response to language and environmental
+factors. Several AI systems have been proposed to generate motions and actions that are tailored to specific linguistic
+instructions (Kim et al., 2023; Zhang et al., 2022; Tevet et al., 2022) and to adapt to various 3D scenes (Wang et al.,
+2022a). This body of research emphasizes the growing capabilities of generative models in enhancing the adaptability
+and responsiveness of AI agents across diverse scenarios.（机器对语音指令进行反馈，驱动）
+
+2.2.1 Hallucinations
+Agents that generate text are often prone to hallucinations, which are instances where the generated text is nonsensical
+or unfaithful to the provided source content (Raunak et al., 2021; Maynez et al., 2020). Hallucinations can be split into
+two categories, intrinsic and extrinsic (Ji et al., 2023). Intrinsic hallucinations are hallucinations that are contradictory
+to the source material, whereas extrinsic hallucinations are when the generated text contains additional information that
+was not originally included in the source material.（幻觉分为内在和外在两种）
+
+Some promising routes for reducing the rate of hallucination in language generation involve using retrieval-augmented
+generation (Lewis et al., 2020; Shuster et al., 2021) or other methods for grounding natural language outputs via
+external knowledge retrieval (Dziri et al., 2021; Peng et al., 2023). Generally, these methods seek to augment language
+generation by retrieving additional source material and by providing mechanisms to check for contradictions between
+the generated response and the source material.（利用RAG减少幻觉）
+
+Within the context of multi-modal agent systems, VLMs have been shown to hallucinate as well (Zhou et al., 2023b).
+One common cause of hallucination for vision-based language-generation is due to the over-reliance on co-occurrence
+of objects and visual cues in the training data (Rohrbach et al., 2018). AI agents that exclusively rely upon pretrained
+LLMs or VLMs and use limited environment-specific finetuning can be particularly vulnerable to hallucinations since
+they rely upon the internal knowledge-base of the pretrained models for generating actions and may not accurately
+understand the dynamics of the world state in which they are deployed.（幻觉在视觉模型里的原因：训练数据问题）（Open AI已给出幻觉产生的原因）
+
+2.2.2 Biases and Inclusivity（偏见和包容性）
+AI agents based on LLMs or LMMs (large multimodal models) have biases due to several factors inherent in their
+design and training process. When designing these AI agents, we must be mindful of being inclusive and aware of the
+needs of all end users and stakeholders. In the context of AI agents, inclusivity refers to the measures and principles
+employed to ensure that the agent’s responses and interactions are inclusive, respectful, and sensitive to a wide range of
+users from diverse backgrounds. We list key aspects of agent biases and inclusivity below.
+    • Training Data: Foundation models are trained on vast amounts of text data collected from the internet,
+    including books, articles, websites, and other text sources. This data often reflects the biases present in
+    human society, and the model can inadvertently learn and reproduce these biases. This includes stereotypes,
+    prejudices, and slanted viewpoints related to race, gender, ethnicity, religion, and other personal attributes. In
+    particular, by training on internet data and often only English text, models implicitly learn the cultural norms of
+    Western, Educated, Industrialized, Rich, and Democratic (WEIRD) societies (Henrich et al., 2010) who have a
+    disproportionately large internet presence. However, it is essential to recognize that datasets created by humans
+    cannot be entirely devoid of bias, since they frequently mirror the societal biases and the predispositions of the
+    individuals who generated and/or compiled the data initially.（训练数据局限性）
+    • Historical and Cultural Biases: AI models are trained on large datasets sourced from diverse content. Thus,
+    the training data often includes historical texts or materials from various cultures. In particular, training
+    data from historical sources may contain offensive or derogatory language representing a particular society’s
+    cultural norms, attitudes, and prejudices. This can lead to the model perpetuating outdated stereotypes or not
+    fully understanding contemporary cultural shifts and nuances.（历史和文化因素）
+    • Language and Context Limitations: Language models might struggle with understanding and accurately
+    representing nuances in language, such as sarcasm, humor, or cultural references. This can lead to misinterpretations
+    or biased responses in certain contexts. Furthermore, there are many aspects of spoken language that
+    are not captured by pure text data, leading to a potential disconnect between human understanding of language
+    and how models understand language.（语言和语境本身限制，如语言中的讽刺、幽默和文化内涵）
+    • Policies and Guidelines: AI agents operate under strict policies and guidelines to ensure fairness and
+    inclusivity. For instance, in generating images, there are rules to diversify depictions of people, avoiding
+    stereotypes related to race, gender, and other attributes.（需要加强政策监管和指导，如图像生成领域）
+    • Overgeneralization: These models tend to generate responses based on patterns seen in the training data.
+    This can lead to overgeneralizations, where the model might produce responses that seem to stereotype or
+    make broad assumptions about certain groups.（刻板化的输出）
+    • Constant Monitoring and Updating: AI systems are continuously monitored and updated to address any
+    emerging biases or inclusivity issues. Feedback from users and ongoing research in AI ethics play a crucial
+    role in this process. Amplification of Dominant Views: Since the training data often includes more content from dominant
+    cultures or groups, the model may be more biased towards these perspectives, potentially underrepresenting or
+    misrepresenting minority viewpoints.（训练和输出具有偏向主流群体的可能，需要持续监控和更新）
+    • Ethical and Inclusive Design: AI tools should be designed with ethical considerations and inclusivity as core
+    principles. This includes respecting cultural differences, promoting diversity, and ensuring that the AI does not
+    perpetuate harmful stereotypes.（道德和包容性的设计准则）
+    • User Guidelines: Users are also guided on how to interact with AI in a manner that promotes inclusivity and
+    respect. This includes refraining from requests that could lead to biased or inappropriate outputs. Furthermore,
+    it can help mitigate models learning harmful material from user interactions.（用户引导）
+
+Despite these measures, AI agents still exhibit biases. Ongoing efforts in agent AI research and development are focused
+on further reducing these biases and enhancing the inclusivity and fairness of agent AI systems. Efforts to Mitigate
+Biases:
+    • Diverse and Inclusive Training Data: Efforts are made to include a more diverse and inclusive range of
+    sources in the training data.（训练数据多样性）
+    • Bias Detection and Correction: Ongoing research focuses on detecting and correcting biases in model
+    responses.（偏见检测与纠正）
+    • Ethical Guidelines and Policies: Models are often governed by ethical guidelines and policies designed to
+    mitigate biases and ensure respectful and inclusive interactions.
+    • Diverse Representation: Ensuring that the content generated or the responses provided by the AI agent
+    represent a wide range of human experiences, cultures, ethnicities, and identities. This is particularly relevant
+    in scenarios like image generation or narrative construction.
+    • Bias Mitigation: Actively working to reduce biases in the AI’s responses. This includes biases related to race,
+    gender, age, disability, sexual orientation, and other personal characteristics. The goal is to provide fair and
+    balanced responses that do not perpetuate stereotypes or prejudices.
+    • Cultural Sensitivity: The AI is designed to be culturally sensitive, acknowledging and respecting the diversity
+    of cultural norms, practices, and values. This includes understanding and appropriately responding to cultural
+    references and nuances.
+    • Accessibility: Ensuring that the AI agent is accessible to users with different abilities, including those with
+    disabilities. This can involve incorporating features that make interactions easier for people with visual,
+    auditory, motor, or cognitive impairments.
+    • Language-based Inclusivity: Providing support for multiple languages and dialects to cater to a global user
+    base, and being sensitive to the nuances and variations within a language (Liu et al., 2023b).
+    • Ethical and Respectful Interactions: The Agent is programmed to interact ethically and respectfully with all
+    users, avoiding responses that could be deemed offensive, harmful, or disrespectful.
+    • User Feedback and Adaptation: Incorporating user feedback to continually improve the inclusivity and
+    effectiveness of the AI agent. This includes learning from interactions to better understand and serve a diverse
+    user base.
+    • Compliance with Inclusivity Guidelines: Adhering to established guidelines and standards for inclusivity in
+    AI agent, which are often set by industry groups, ethical boards, or regulatory bodies.
+
+Despite these efforts, it’s important to be aware of the potential for biases in responses and to interpret them with critical
+thinking. Continuous improvements in AI agent technology and ethical practices aim to reduce these biases over time.
+One of the overarching goals for inclusivity in agent AI is to create an agent that is respectful and accessible to all users,
+regardless of their background or identity.
+
+2.2.3 Data Privacy and Usage（数据隐私和使用）
+One key ethical consideration of AI agents involves comprehending how these systems handle, store, and potentially
+retrieve user data. We discuss key aspects below:
+
+Data Collection, Usage and Purpose. When using user data to improve model performance, model developers
+access the data the AI agent has collected while in production and interacting with users. Some systems allow users
+to view their data through user accounts or by making a request to the service provider. It is important to recognize
+what data the AI agent collects during these interactions. This could include text inputs, user usage patterns, personal
+preferences, and sometimes more sensitive personal information. Users should also understand how the data collected
+from their interactions is used. If, for some reason, the AI holds incorrect information about a particular person or
+group, there should be a mechanism for users to help correct this once identified. This is important for both accuracy
+and to be respectful of all users and groups. Common uses for retrieving and analyzing user data include improving
+user interaction, personalizing responses, and system optimization. It is extremely important for developers to ensure
+the data is not used for purposes that users have not consented to, such as unsolicited marketing.（用户需要知道自己的数据如何在使用，以及可以纠正错误数据）
+
+Storage and Security. Developers should know where the user interaction data is stored and what security measures
+are in place to protect it from unauthorized access or breaches. This includes encryption, secure servers, and data
+protection protocols. It is extremely important to determine if agent data is shared with third parties and under what
+conditions. This should be transparent and typically requires user consent.（数据存储与安全性）
+
+Data Deletion and Retention. It is also important for users to understand how long user data is stored and how users
+can request its deletion. Many data protection laws give users the right to be forgotten, meaning they can request their
+data be erased. AI agents must adhere to data protection laws like GDPR in the EU or CCPA in California. These laws
+govern data handling practices and user rights regarding their personal data.（数据删除与保留）
+
+Data Portability and Privacy Policy. Furthermore, developers must create the AI agent’s privacy policy to document
+and explain to users how their data is handled. This should detail data collection, usage, storage, and user rights.
+Developers should ensure that they obtain user consent for data collection, especially for sensitive information. Users
+typically have the option to opt-out or limit the data they provide. In some jurisdictions, users may even have the right
+to request a copy of their data in a format that can be transferred to another service provider.（数据可移植性和隐私政策）
+
+Anonymization. For data used in broader analysis or AI training, it should ideally be anonymized to protect individual
+identities. Developers must understand how their AI agent retrieves and uses historical user data during interactions.
+This could be for personalization or improving response relevance.（用户数据匿名化）
+
+In summary, understanding data privacy for AI agents involves being aware of how user data is collected, used, stored,
+and protected, and ensuring that users understand their rights regarding accessing, correcting, and deleting their data.
+Awareness of the mechanisms for data retrieval, both by users and the AI agent, is also crucial for a comprehensive
+understanding of data privacy.
+
+2.2.4 Interpretability and Explainability（可解释性）
+Imitation Learning → Decoupling（解耦）. Agents are typically trained using a continuous feedback loop in Reinforcement
+Learning (RL) or Imitation Learning (IL), starting with a randomly initialized policy. However, this approach faces
+leader-board in obtaining initial rewards in unfamiliar environments（陌生环境中获取初始奖励的排行榜）, particularly when
+rewards are sparse or only available at the end of a long-step interaction（最后才能获取奖励）. Thus, a superior solution
+is to use an infinite-memory agent trained through IL, which can learn policies from expert data, improving exploration
+and utilization of unseen environmental space with emergent infrastructure as shown in Fig. 3. With expert characteristics
+to help the agent explore better and utilize the unseen environmental space. Agent AI, can learn policies and new paradigm
+flow directly from expert data. Traditional IL has an agent mimicking an expert demonstrator’s behavior to learn a policy.
+However, learning the expert policy directly may not always be the best approach, as the agent may not generalize well
+to unseen situations. To tackle this, we propose learning an agent with in-context prompt or a implicit reward function
+that captures key aspects of the expert’s behavior, as shown in Fig. 3. This equips the infinite memory agent with
+physical-world behavior data for task execution, learned from expert demonstrations. It helps overcome existing imitation
+learning drawbacks like the need for extensive expert data and potential errors in complex tasks. The key idea behind
+the Agent AI has two parts:
+1) the infinite agent that collects physical-world expert demonstrations as state-action pairs and
+2) the virtual environment that imitates the agent generator.
+The imitating agent produces actions that mimic the expert’s behavior, while the agent learns a policy mapping from
+states to actions by reducing a loss function of the disparity between the expert’s actions and the actions generated
+by the learned policy.（无限内存智能体——模仿专家数据进行训练——上下文提示或隐式奖励函数）
+
+Decoupling → Generalization（泛化）. Rather than relying on a task-specific reward function, the agent learns from
+expert demonstrations, which provide a diverse set of state-action pairs covering various task aspects. The agent
+then learns a policy that maps states to actions by imitating the expert’s behavior. Decoupling in imitation learning
+refers to separating the learning process from the task-specific reward function, allowing the policy to generalize
+across different tasks without explicit reliance on the task-specific reward function. By decoupling, the agent can
+learn from expert demonstrations and learn a policy that is adaptable to a variety of situations. Decoupling enables
+transfer learning, where a policy learned in one domain can adapt to others with minimal fine-tuning. By learning
+a general policy that is not tied to a specific reward function, the agent can leverage the knowledge it acquired in
+one task to perform well in other related tasks. Since the agent does not rely on a specific reward function, it can
+adapt to changes in the reward function or environment without the need for significant retraining. This makes the
+learned policy more robust and generalizable across different environments. Decoupling in this context refers to
+the separation of two tasks in the learning process: learning the reward function and learning the optimal policy.
+Figure 3: Example of the Emergent Interactive Mechanism using an agent to identify text relevant to the image from
+candidates. The task involves using a multi-modal AI agent from the web and human-annotated knowledge interaction
+samples to incorporate external world information.（不依赖特定的奖励函数，）
+
+Generalization → Emergent Behavior. Generalization explains how emergent properties or behaviors can arise from simpler
+components or rules. The key idea lies in identifying the basic elements or rules that govern the behavior of the system,
+such as individual neurons or basic algorithms. Consequently, by observing how these simple components or rules interact
+with one another. These interactions of these components often lead to the emergence of complex behaviors, which
+are not predictable by examining individual components alone. Generalization across different levels of complexity
+allows a system to learn general principles applicable across these levels, leading to emergent properties. This enables
+the system to adapt to new situations, demonstrating the emergence of more complex behaviors from simpler rules.
+Furthermore, the ability to generalize across different complexity levels facilitates knowledge transfer from one
+domain to another, which contributes to the emergence of complex behaviors in new contexts as the system adapts.
+
+2.2.5 Inference Augmentation（推理增强）
+The inference ability of an AI agent lies in its capacity to interpret, predict, and respond based on its training and input
+data. While these capabilities are advanced and continually improving, it’s important to recognize their limitations and
+the influence of the underlying data they are trained on. Particularly, in the context of large language models, it refers to
+its capacity to draw conclusions, make predictions, and generate responses based on the data it has been trained on and
+the input it receives. Inference augmentation in AI agents refers to enhancing the AI’s natural inference abilities with
+additional tools, techniques, or data to improve its performance, accuracy, and utility. This can be particularly important
+in complex decision-making scenarios or when dealing with nuanced or specialized content. We denote particularly
+important sources for inference augmentation below:
+Data Enrichment. Incorporating additional, often external, data sources to provide more context or background
+can help the AI agent make more informed inferences, especially in areas where its training data may be limited. For
+example, AI agents can infer meaning from the context of a conversation or text. They analyze the given information
+and use it to understand the intent and relevant details of user queries. These models are proficient at recognizing
+patterns in data. They use this ability to make inferences about language, user behavior, or other relevant phenomena
+based on the patterns they’ve learned during training.
+
+Algorithm Enhancement. Improving the AI’s underlying algorithms to make better inferences. This could involve
+using more advanced machine learning models, integrating different types of AI (like combining NLP with image
+recognition), or updating algorithms to better handle complex tasks. Inference in language models involves understanding
+and generating human language. This includes grasping nuances like tone, intent, and the subtleties of different
+linguistic constructions.
+
+Human-in-the-Loop (HITL). Involving human input to augment the AI’s inferences can be particularly useful in
+areas where human judgment is crucial, such as ethical considerations, creative tasks, or ambiguous scenarios. Humans
+can provide guidance, correct errors, or offer insights that the agent would not be able to infer on its own.（人类参与）
+
+Real-Time Feedback Integration. Using real-time feedback from users or the environment to enhance inferences
+is another promising method for improving performance during inference. For example, an AI might adjust its
+recommendations based on live user responses or changing conditions in a dynamic system. Or, if the agent is taking
+actions in a simulated environment that break certain rules, the agent can be dynamically given feedback to help correct
+itself.（实时反馈交互）
+
+Cross-Domain Knowledge Transfer. Leveraging knowledge or models from one domain to improve inferences in
+another can be particularly helpful when producing outputs within a specialized discipline. For instance, techniques
+developed for language translation might be applied to code generation, or insights from medical diagnostics could
+enhance predictive maintenance in machinery.（跨领域知识迁移）
+
+Customization for Specific Use Cases. Tailoring the AI’s inference capabilities for particular applications or
+industries can involve training the AI on specialized datasets or fine-tuning its models to better suit specific tasks,
+such as legal analysis, medical diagnosis, or financial forecasting. Since the particular language or information within
+one domain can greatly contrast with the language from other domains, it can be beneficial to finetune the agent on
+domain-specific information.（特定领域需求，主要是需要对模型fine-tunning）
+
+Ethical and Bias Considerations. It is important to ensure that the augmentation process does not introduce new
+biases or ethical issues. This involves careful consideration of the sources of additional data or the impact of the
+new inference augmentation algorithms on fairness and transparency. When making inferences, especially about
+sensitive topics, AI agents must sometimes navigate ethical considerations. This involves avoiding harmful stereotypes,
+respecting privacy, and ensuring fairness.
+
+Continuous Learning and Adaptation. Regularly updating and refining the AI’s capabilities to keep up with new
+developments, changing data landscapes, and evolving user needs.
+
+In summmary, inference augmentation in AI agents involves methods in which their natural inference abilities can be
+enhanced through additional data, improved algorithms, human input, and other techniques. Depending on the use-case,
+this augmentation is often essential for dealing with complex tasks and ensuring accuracy in the agent’s outputs.
+
+2.2.6 Regulation
+Recently, Agent AI has made significant advancements, and its integration into embodied systems has opened new
+possibilities for interacting with agents via more immersive, dynamic, and engaging experiences. To expedite the
+process and ease the cumbersome work in agent AI developing, we are proposing to develop the next-generation
+AI-empowered pipeline for agent interaction. Develop a human-machine collaboration system where humans and
+machines can communicate and interact meaningfully. The system can leverage the LLM’s or VLM dialog capabilities
+and vast action to talk with human players and identify human needs. Then it will perform proper actions to help human
+players upon request.
+When employing LLM/VLMs for a human-machine collaboration system, it is essential to note that these operate as
+black boxes, generating unpredictable output. This uncertainty can become crucial in a physical setup, such as operating
+actual robotics. An approach to address this challenge is constraining the focus of the LLM/VLM through prompt
+engineering. For instance, in robotic task planning from instructions, providing environmental information within the
+prompt has been reported to yield more stable outputs than relying solely on text (Gramopadhye and Szafir, 2022). This
+report is supported by the Minsky’s frame theory of AI (Minsky, 1975), suggesting that the problem space to be solved
+by LLM/VLMs is defined by the given prompts. Another approach is designing prompts to make LLM/VLMs include
+explanatory text to allow users understand what the model has focused on or recognized. Additionally, implementing
+a higher layer that allows for pre-execution verification and modification under human guidance can facilitate the
+operation of systems working under such guidance (Fig. 4).（通过提示词工程让大模型聚集到特定任务上，大模型输出action步骤，human确认，机器执行）
+
+Figure 4: A robot teaching system developed in (Wake et al., 2023c). (Left) The system workflow. The process involves
+three steps: Task planning, where ChatGPT plans robotic tasks from instructions and environmental information;
+Demonstration, where the user visually demonstrates the action sequence. All the steps are reviewed by the user, and if
+any step fails or shows deficiencies, the previous steps can be revisited as necessary. (Right) A web application that
+enables uploading of demonstration data and the interaction between the user and ChatGPT.
+
+2.3 Agent AI for Emergent Abilities
+Despite the growing adoption of interactive agent AI systems, the majority of proposed methods still face a challenge in
+terms of their generalization（泛化） performance in unseen environments or scenarios. Current modeling practices require
+developers to prepare large datasets for each domain to finetune/pretrain models; however, this process is costly and even
+impossible if the domain is new. To address this issue, we build interactive agents that leverage the knowledge-memory
+of general-purpose foundation models (ChatGPT, Dall-E, GPT-4, etc.) for a novel scenario, specifically for generating
+a collaboration space between humans and agents. We discover an emergent mechanism— which we name Mixed
+Reality with Knowledge Inference Interaction—that facilitates collaboration with humans to solve challenging tasks in
+complex real-world environments and enables the exploration of unseen environments for adaptation to virtual reality.
+For this mechanism, the agent learns i) micro-reactions in cross-modality: collecting relevant individual knowledge
+for each interaction task (e.g., understanding unseen scenes) from the explicit web source and by implicitly inferring
+from the output of pretrained models; ii) macro-behavior in reality-agnostic: improving interactive dimensions and
+patterns in language and multi-modality domains, and make changes based on characterized roles, certain target
+variable, influenced diversification of collaborative information in mixed-reality and LLMs. We investigate the task
+of knowledge-guided interactive synergistic effects to collaborated scene generation with combining various OpenAI
+models, and show promising results of how the interactive agent system can further boost the large foundation models in
+our setting. It integrates and improves the depth of generalization, conscious and interpretability of a complex adaptive
+AI systems.
+
+Figure 5: Our proposed new agent paradigm for a multi-modal generalist agent. There are 5 main modules as shown in
+the figures: 1) Environment and Perception with task-planning and skill observation; 2) Agent learning; 3) Memory; 4)
+Agent action; 5) Cognition.
+
+
+
+
+3 Agent AI Paradigm
+In this section, we discuss a new paradigm and framework for training Agent AI. We seek to accomplish several goals
+with our proposed framework:
+    • Make use of existing pre-trained models and pre-training strategies to effectively bootstrap our agents with
+    effective understanding of important modalities, such as text or visual inputs.
+    • Support for sufficient long-term task-planning capabilities.
+    • Incorporate a framework for memory that allows for learned knowledge to be encoded and retrieved later.
+    • Allow for environmental feedback to be used to effectively train the agent to learn which actions to take.
+We show a high-level new agent diagram outlining the important submodules of such a system in Fig. 5.
+
+3.1 LLMs and VLMs
+We can use the LLM or VLM model to bootstrap the components of the Agent as showed in Fig. 5. In particular, LLMs
+have been shown to perform well for task-planning (Gong et al., 2023a), contain significant world knowledge (Yu et al.,
+2023b), and display impressive logical reasoning capabilities (Creswell et al., 2022). Additionally, VLMs such as CLIP
+(Radford et al., 2021) provide a general visual encoder that is language-aligned, as well as providing zero-shot visual
+recognition capabilities. For example, state-of-the-art open-source multi-modal models such as LLaVA (Liu et al.,
+2023c) and InstructBLIP (Dai et al., 2023) rely upon frozen CLIP models as visual encoders.
+
+3.2 Agent Transformer Definition
+Instead of using frozen LLMs and VLMs for the AI agent, it is also possible to use a single-agent transformer model
+that takes visual tokens and language tokens as input, similar to Gato (Reed et al., 2022). In addition to vision and
+language, we add a third general type of input, which we denote as agent tokens. Conceptually, agent tokens are
+used to reserve a specific subspace of the input and output space of the model for agentic behaviors. For robotics or
+game playing, this may be represented as the input action space of the controller. When training agents to use specific
+tools, such as image-generation or image-editing models, or for other API calls, agent tokens can also be used. As
+showed in Fig. 7, we can combine the agent tokens with visual and language tokens to generate a unified interface for
+training multi-modal agent AI. Compared to using large, proprietary LLMs as agents, there are several advantages
+to using an agent transformer. Firstly, the model can be easily customized to very specific agentic tasks that may be
+difficult to represent in natural language (e.g. controller inputs or other specific actions). Thus, the agent can learn from
+environmental interactions and domain-specific data to improve performance. Secondly, it can be easier to understand
+why the model does or does not take specific actions by having access to the probabilities of the agent tokens. Thirdly,
+
+Figure 6: We show the current paradigm for creating multi-modal AI agents by incorporating a Large Language Model
+(LLM) with a Large Vision Model (LVM). Generally, these models take visual or language inputs and use pre-trained
+and frozen visual and language models, learning smaller sub-network that connect and bridge modalities. Examples
+include Flamingo (Alayrac et al., 2022), BLIP-2 (Li et al., 2023c), InstructBLIP (Dai et al., 2023), and LLaVA (Liu
+et al., 2023c)
+
+Figure 7: The unified agent multi-modal transformer model. Instead of connecting frozen submodules and using existing
+foundation models as building blocks, we propose a unified and end-to-end training paradigm for agent systems. We
+can still initialize the submodules with LLMs and LVMs as in Figure 6 but also make use of agent tokens, specialized
+tokens for training the model to perform agentic behaviors in a specific domain (e.g., robotics). For more details about
+agent tokens, see Section 3.2
+
+there are certain domains such as healthcare and law that have strict data privacy requirements. Finally, a relatively
+smaller agent transformer can potentially be significantly cheaper than a larger proprietary language model.
+
+3.3 Agent Transformer Creation
+As shown above in Fig. 5, we can use the new agent paradigm with LLM and VLM-bootstrapped agents, as well as
+leveraging data generated from large foundation models to train the agent transformer model for learning to execute
+specific goals. Within this process, the agent model is trained to be specialized and tailored for specific tasks and
+domains. This approach allows you to leverage a pre-existing, foundation model’s learned features and knowledge. We
+show a simplified overview of the process in two steps below:
+Define Objectives within the Domain. In order to train the agent transformer, the objectives and the action-space
+of the agent within the context of each specific environment needs to be clearly defined. This includes determining
+which specific tasks or actions the agent needs to perform and assigning unique agent tokens for each. Furthermore, any
+automatic rules or procedures that can be used to identify successful completion of tasks can significantly improve the
+amount of data available for training. Otherwise, foundation-model generated or human-annotated data will be required
+for training the model. After the data is collected and it is possible to evaluate the performance of the agent, the process
+of continuous improvement can begin.
+Continuous Improvement. Continuous monitoring of the model’s performance and collection of feedback are
+essential steps in the process. Feedback should be used for further fine-tuning and updates. It is also crucial to ensure
+that the model does not perpetuate biases or unethical outcomes. This necessitates a careful examination of the training
+data, regular checks for biases in outputs, and, if needed, training the model to recognize and avoid biases. Once the
+model achieves satisfactory performance, it can be deployed for the intended application. Continuous monitoring
+remains vital to ensure that the model performs as expected and to facilitate necessary adjustments. More details on this
+process, sources of training data, and details surrounding continous learning for agent AI can be found in Section 8.
+
+4 Agent AI Learning
+4.1 Strategy and Mechanism
+The strategy of interactive AI on different domains which extends the paradigm of calling large foundation models
+with a trained agent that actively seeks to collect user feedback, action information, useful knowledge for generation
+and interaction. Some times, the LLM/VLM models are not need to trained again, and we improve their performance
+by providing improved contextual prompts at test time for an agent. On the other hand, it always involves a knowledge/reasoning/commonsense/inference interactive modeling through a combination of triple systems - one performing
+knowledge retrieval from multi-model query, second performing interactive generation from the relevant agent, and
+last one the trained a new, informative self-supervised training or pre-training with reinforcement learning or imitation
+learning with improved way.
+
+4.1.1 Reinforcement Learning (RL)
+There is a rich history of leveraging reinforcement learning (RL) to train interactive agents that exhibits intelligent
+behaviors. RL is a methodology to learn the optimal relationship between states and actions based on rewards (or
+penalties) received as a result of its actions. RL is a highly scalable framework that has been applied to numerous
+applications including robotics, however, it generally faces several leader-board and LLM/VLMs have shown their
+potential to mitigate or overcome some of those difficulties:
+• Reward designing The efficiency of policy learning greatly depends on the design of the reward function.
+Designing the reward function requires not only knowledge of RL algorithms but also a deep understanding of
+the nature of the task, and thus often necessitates crafting the function based on expert experience. Several
+studies explored the use of LLM/VLMs for designing reward functions (Yu et al., 2023a; Katara et al., 2023;
+Ma et al., 2023).
+• Data collection and efficiency Given its exploratory nature, RL-based policy learning requires a significant
+amount of data (Padalkar et al., 2023). The necessity for extensive data becomes particularly evident when
+the policy involves managing long sequences or integrating complex actions. This is because these scenarios
+demand more nuanced decision-making and learning from a wider range of situations. In recent studies, efforts
+have been directed towards enhancing data generation to support policy learning (Kumar et al., 2023; Du et al.,
+2023). Additionally, in some studies, these models have been integrated into the reward function to improve
+policy learning (Sontakke et al., 2023). Parallel to these developments, another strand of research has focused
+on achieving parameter efficiency in learning processes using VLMs (Tang et al., 2023; Li et al., 2023d) and
+LLMs (Shi et al., 2023)
+• Long-horizon steps In relation to the issue of data efficiency, RL becomes more challenging as the length
+of action sequences increases. This is due to the ambiguity in the relationship between actions and rewards,
+known as the credit assignment problem, and the increase in the number of states to be explored, necessitating
+a significant amount of time and data. One typical approach for long and complex tasks is to break them down
+into a sequence of subgoals and apply pretrained policies to solve each subgoal (e.g., (Takamatsu et al., 2022)).
+This idea falls within the framework called the task and motion planning (TAMP)(Garrett et al., 2021). TAMP
+is composed of two primary components: task planning, which entails identifying sequences of high-level
+actions, and motion planning, which involves finding physically consistent, collision-free trajectories to achieve
+the objectives of the task plan.
+LLMs are well-suited to TAMP, and recent research has often adopted an approach where LLMs are used to
+execute high-level task planning, while low-level controls are addressed with RL-based policies (Xu et al.,
+2023; Sun et al., 2023a; Li et al., 2023b; Parakh et al., 2023). The advanced capabilities of LLMs enable them
+to effectively decompose even abstract instructions into subgoals (Wake et al., 2023c), contributing to the
+enhancement of language understanding abilities in robotic systems.
+
+4.1.2 Imitation Learning (IL)
+While RL aims to train a policy based on exploratory behavior and maximizing rewards through interactions with the
+environment, imitation learning (IL) seeks to leverage expert data to mimic the actions of experienced agents or experts.
+For example, in robotics, one of the major frameworks based on IL is Behavioral Cloning (BC). BC is an approach
+where a robot is trained to mimic the actions of an expert by directly copying them. In this approach, the expert’s actions
+in performing specific tasks are recorded, and the robot is trained to replicate these actions in similar situations. Recent
+BC-based methods often incorporate technologies from LLM/VLMs, enabling more advanced end-to-end models. For
+example, Brohan et al. proposed RT-1 (Brohan et al., 2022) and RT-2 (Brohan et al., 2023), transformer-based models
+that output an action sequence for the base and arm, taking a series of images and language as input. These models are
+reported to show high generalization performance as the result of training on a large amount of training data.
+
+4.1.3 Traditional RGB
+Learning intelligent agent behavior leveraging image inputs has been of interest for many years (Mnih et al., 2015). The
+inherent challenge of using RGB input is the curse of dimensionality. To solve this problem, researchers either use
+more data (Jang et al., 2022; Ha et al., 2023) or introduce inductive biases into the model design to improve sample
+efficiency. In particular, authors incorporate 3D structures into the model architecture for manipulations (Zeng et al.,
+2021; Shridhar et al., 2023; Goyal et al., 2023; James and Davison, 2022). For robot navigation, authors (Chaplot et al.,
+2020a,b) leverage maps as a representation. Maps can either be learned from a neural network aggregating all previous
+RGB inputs or through 3D reconstruction methods such as Neural Radiance Fields (Rosinol et al., 2022).
+To obtain more data, researchers synthesize synthetic data using graphics simulators (Mu et al., 2021; Gong et al.,
+2023b), and try to close the sim2real gap (Tobin et al., 2017; Sadeghi and Levine, 2016; Peng et al., 2018). Recently,
+there has been some collective effort to curate large-scale dataset that aims to resolve the data scarcity problem (Padalkar
+et al., 2023; Brohan et al., 2023). On the other hand, to improve sample complexity, data augmentation techniques have
+been extensively studied as well (Zeng et al., 2021; Rao et al., 2020; Haarnoja et al., 2023; Lifshitz et al., 2023).
+
+4.1.4 In-context Learning
+In-context learning was shown to be an effective method for solving tasks in NLP with the advent of large language
+models like GPT-3 (Brown et al., 2020; Min et al., 2022). Few-shot prompts were seen to be an effective way to
+contextualize model output’s across a variety of tasks in NLP by providing examples of the task within the context of the
+LLM prompt. Factors like the diversity of examples and quality of examples shown for the in-context demonstrations
+may improve the quality of model outputs (An et al., 2023; Dong et al., 2022). Within the context of multi-modal
+foundation models, models like Flamingo and BLIP-2 (Alayrac et al., 2022; Li et al., 2023c) have been shown to be
+effective at a variety of visual understanding tasks when given only given a small number of examples. In context
+learning can be further improved for agents within environments by incorporating environment-specific feedback when
+certain actions are taken (Gong et al., 2023a).
+
+4.1.5 Optimization in the Agent System
+The optimization of agent systems can be divided into spatial and temporal aspects. Spatial optimization considers how
+agents operate within a physical space to execute tasks. This includes inter-robot coordination, resource allocation, and
+keeping an organized space.
+In order to effectively optimize agent AI systems, especially systems with large numbers of agents acting in parallel,
+previous works have focused on using large batch reinforcement learning (Shacklett et al., 2023). Since datasets of
+multi-agent interactions for specific tasks are rare, self-play reinforcement learning enables a team of agents to improve
+over time. However, this may also lead to very brittle agents that can only work under self-play and not with humans or
+other independent agents since they over-fit to the self-play training paradigm. To address this issue, we can instead
+discover a diverse set of conventions (Cui et al., 2023; Sarkar et al., 2023), and train an agent that is aware of a wide
+range of conventions. Foundation models can further help to establish conventions with humans or other independent
+agents, enabling smooth coordination with new agents.
+Temporal optimization, on the other hand, focuses on how agents execute tasks over time. This encompasses task
+scheduling, sequencing, and timeline efficiency. For instance, optimizing the trajectory of a robot’s arm is an example
+of efficiently optimizing movement between consecutive tasks (Zhou et al., 2023c). At the level of task scheduling,
+methods like LLM-DP (Dagan et al., 2023) and ReAct (Yao et al., 2023a) have been proposed to solve efficient task
+planning by incorporating environmental factors interactively.
+
+4.2 Agent Systems (zero-shot and few-shot level)
+4.2.1 Agent Modules
+Our foray into the agent paradigm involves the development of Agent AI "Modules" for interactive multi-modal agents
+using LLMs or VLMs. Our initial Agent Modules facilitate training or in-context learning and adopt a minimalist
+design for the purposes of demonstrating the agent’s ability to schedule and coordinate effectively. We also explored
+initial prompt-based memory techniques that facilitate better planning and inform future actions approaches within the
+domain. To illustrate, our “MindAgent" infrastructure comprises 5 main modules: 1) environment perception with task
+planning, 2) agent learning, 3) memory, 4) general agent action prediction and 5) cognition, as shown in Figure 5.
+
+4.2.2 Agent Infrastructure
+Agent-based AI is a large and fast-growing community within the domains of entertainment, research, and industry.
+The development of large foundation models has significantly improved the performance of agent AI systems. However,
+creating agents in this vein is limited by the increasing effort necessary to create high-quality datasets and overall
+cost. At Microsoft, building high-quality agent infrastructure has significantly impacted multi-modal agent copilots by
+using advanced hardware, diverse data sources, and powerful software libraries. As Microsoft continues to push the
+boundaries of agent technology, AI agent platforms are poised to remain a dominant force in the world of multimodal
+intelligence for years to come. Nevertheless, agent AI interaction is currently still a complex process that requires a
+combination of multiple skills. The recent advancements in the space of large generative AI models have the potential
+to greatly reduce the current high cost and time required for interactive content, both for large studios, as well as
+empowering smaller independent content creators to design high quality experiences beyond what they are currently
+capable of. The current human-machine interaction systems inside multi-modal agents are primarily rule-based. They
+do have intelligent behaviors in response to human/user actions and possess web knowledge to some extent. However,
+these interactions are often limited by software development costs to enable specific behaviors in the system. In addition,
+current models are not designed to help human to achieve a goal in the case of users’ inability to achieve specific tasks.
+Therefore, there is a need for an agent AI system infrastructure to analyze users behaviors and provide proper support
+when needed.
+
+4.3 Agentic Foundation Models (pretraining and finetune level)
+The use of pre-trained foundation models offers a significant advantage in their wide applicability across diverse use
+cases. The integration of these models enables the development of customized solutions for various applications,
+circumventing the need for extensive labeled datasets for each specific task.
+A notable example in the field of navigation is the LM-Nav system (Shah et al., 2023a), which incorporates GPT-3
+and CLIP in a novel approach. It effectively uses textual landmarks generated by the language model, anchoring them
+in images acquired by robots for navigation. This method demonstrates a seamless fusion of textual and visual data,
+significantly enhancing the capabilities of robotic navigation, while maintaining wide applicability.
+In robot manipulation, several studies have proposed the use of off-the-shelf LLMs (e.g., ChatGPT) while using open
+vocabulary object detectors. The combination of LLM and advanced object detectors (e.g., Detic (Zhou et al., 2022))
+facilitates the understanding of human instruction while grounding the textual information in scenery information (Parakh
+et al., 2023). Furthermore, the latest advancements showcase the potential of using prompt engineering with advanced
+multi-modal models such as GPT-4V(ision) (Wake et al., 2023b). This technique opens avenues for multi-modal task
+planning, underscoring the versatility and adaptability of pre-trained models in a variety of contexts.
+
+5 Agent AI Categorization
+5.1 Generalist Agent Areas
+Computer-based action and generalist agents (GAs) are useful for many tasks. Recent progress in the field of large
+foundation models and interactive AI has enabled new functionalities for GAs. However, for a GA to become truly
+valuable to its users, it must be natural to interact with, and generalize to a broad range of contexts and modalities. We
+high-quality extended main Chapters on Agent foundation AI in Sec.6, especially in areas relevant to the themes in
+general of these topics:
+Multimodal Agent AI (MMA) is an upcoming forum2
+for our research and industry communities to engage with each
+other and with the broader research and technology communities in Agent AI. Recent progress in the field of large
+foundation models and interactive AI has enabled new functionalities for generalist agents (GAs), such as predicting
+user actions and task planning in constrained settings (e.g., MindAgent (Gong et al., 2023a), fine-grained multimodal
+video understanding (Luo et al., 2022), Robotics (Ahn et al., 2022b; Brohan et al., 2023)), or providing a chat companion
+for users that incorporates knowledge feedback (e.g., website customer support for healthcare systems (Peng et al.,
+2023)). More details about the representative works and most recent representative works are shown below. We hope to
+discuss our vision for the future of MAA and inspire future researchers to work in this space. This article and our forum
+covers the following main topics, but is not limited exclusively to these:
+• Primary Subject Topics: Multimodal Agent AI, General Agent AI
+• Secondary Subject Topics: Embodied Agents, Action Agents, Language-based Agents, Vision & Language
+Agents, Knowledge and Inference Agents, Agents for Gaming, Robotics, Healthcare, etc.
+• Extend Subject Topics: Visual Navigation, Simulation Environments, Rearrangement, Agentic Foundation
+Models, VR/AR/MR, Embodied Vision & Language.
+Next, we present a specific lists of representative agent categories as follows:
+
+5.2 Embodied Agents
+Our biological minds live in bodies, and our bodies move through a changing world. The goal of embodied artificial
+intelligence is to create agents, such as robots, which learn to creatively solve challenging tasks requiring interaction with
+the environment. While this is a significant challenge, important advances in deep learning and the increasing availability
+of large datasets like ImageNet have enabled superhuman performance on a variety of AI tasks previously thought
+intractable. Computer vision, speech recognition and natural language processing have experienced transformative
+revolutions at passive input-output tasks like language translation and image classification, and reinforcement learning
+has similarly achieved world-class performance at interactive tasks like game playing. These advances have supercharged
+embodied AI, enabling a growing collection of users to make rapid progress towards intelligent agents can interactive
+with machine.
+
+5.2.1 Action Agents
+Action agents refer to the agents that need to execute physical actions in the simulated physical environment or real
+world. In particular, they need to be actively engaging in activities with the environment. We broadly classify action
+agents into two different categories based on their application domains: gaming AI and robotics.
+In gaming AI, the agents will interact with the game environment and other independent entities. In these settings,
+natural language can enable smooth communication between agents and humans. Depending on the game, there may be
+a specific task to accomplish, providing a true reward signal. For instance, in the competitive Diplomacy game, training
+a language model using human conversation data along with an action policy with RL enables human-level play (Meta
+Fundamental AI Research (FAIR) Diplomacy Team et al., 2022).
+There are also settings where we agents act as normal residents in a town (Park et al., 2023a), without trying to optimize
+a specific goal. Foundation models are useful in these settings because they can model interactions that appear more
+natural by mimicking human behavior. When augmented with external memory, they produce convincing agents that
+can have conversations, daily schedules, form relationships, and have a virtual life.
+
+5.2.2 Interactive Agents
+Interactive agents simply refer to agents that can interact with the world, a broader class of agents than action agents.
+Their forms of interaction do not necessarily require physical actions, but may involve communicating information to
+users or modifying the environment. For instance, an embodied interactive agent may answer a user’s questions about a
+topic through dialogue or help users parse through existing information similar to a chatbot. By extending an agent’s
+capabilities to include information sharing, the core designs and algorithms of Agent AI can be effectively adapted for a
+range of applications, such as diagnostic (Lee et al., 2023) and knowledge-retrieval (Peng et al., 2023) agents.
+
+5.3 Simulation and Environments Agents
+An effective approach for AI agents to learn how to act in an environment is to go through trial-and-error experiences
+via interactions with the environment. A representative method is RL, which requires extensive experience of failures
+to train an agent. Although there exist approaches that use physical agents (Kalashnikov et al., 2018), using physical
+agents is time-consuming and costly. Furthermore, training in the physical environment is often feasible when failure in
+actual environments can be dangerous (e.g., autonomous driving, underwater vehicles). Hence, using simulators to
+learn policies is a common approach.
+Many simulation platforms have been proposed for research in embodied AI, ranging from navigation (Tsoi et al.,
+2022; Deitke et al., 2020; Kolve et al., 2017) to object manipulation (Wang et al., 2023d; Mees et al., 2022; Yang
+et al., 2023a; Ehsani et al., 2021). One example is Habitat (Savva et al., 2019; Szot et al., 2021), which provides a
+3D indoor environment where human- and robotic-agents can perform various tasks such as navigation, instruction
+following, and question answering. Another representative simulation platform is VirtualHome (Puig et al., 2018),
+supporting human avatars for object manipulation in 3D indoor environments. In the field of gaming, Carroll et al.
+have introduced "Overcooked-AI," a benchmark environment designed to study cooperative tasks between humans and
+AI (Carroll et al., 2019). Along similar lines, several works aim to incorporate real human intervention beyond the
+focus of interaction between agents and the environment (Puig et al., 2023; Li et al., 2021a; Srivastava et al., 2022).
+These simulators contribute to the learning of policies in practical settings involving agent and robot interactions, and
+IL-based policy learning utilizing human demonstrative actions.
+In certain scenarios, the process of learning a policy may necessitate the integration of specialized features within
+simulators. For example, in the case of learning image-based policies, realistic rendering is often required to facilitate
+adaptability to real environments (Mittal et al., 2023; Zhong et al., 2023). Utilizing a realistic rendering engine is
+effective for generating images that reflect various conditions, such as lighting environments. Moreover, simulators
+employing physics engines are required to simulate physical interactions with objects (Liu and Negrut, 2021). The
+integration of physics engines in simulation has been shown to facilitate the acquisition of skills that are applicable in
+real-world scenarios (Saito et al., 2023).
+
+5.4 Generative Agents
+The recent advancements in the space of large generative AI models have the potential to greatly reduce the current high
+cost and time required for interactive content, both for large gaming studios, as well as empower smaller independent
+studios to create high quality experiences beyond what they are currently capable of. Additionally, embedding large AI
+models within a sandbox environment will allow users to author their own experiences and express their creativity in
+ways that are currently out of reach.
+The goals of this agent go beyond simply adding interactive 3d content to scenes, but also include:
+• Adding arbitrary behavior and rules of interactions to the objects, allowing the user to create their own VR
+rules with minimal prompting.
+• Generating whole level geometry from a sketch on a piece of paper, by using the multimodal GPT4-v model,
+as well as other chains of models involving vision AI models
+• Retexturing content in scenes using diffusion models
+• Creating custom shaders and visual special effects from simple user prompts
+One potential application in the short term is the VR creation of a storyboarding/prototype tool allowing a single user to
+create a rough (but functional) sketch of an experience/game an order of magnitude faster than currently feasible. Such
+a prototype then could be expanded and made more polished using these tools as well.
+
+5.4.1 AR/VR/mixed-reality Agents
+AR/VR/mixed-reality (jointly referred to as XR) settings currently require skilled artists and animators to create
+characters, environments, and objects to be used to model interactions in virtual worlds. This is a costly process that
+involves concept art, 3D modeling, texturing, rigging, and animation. XR agents can assist in this process by facilitating
+interactions between creators and building tools to help build the final virtual environment.
+Our early experiments have already demonstrated that GPT models can be used in the few-shot regime inside of the
+Unity engine (without any additional fine-tuning) to call engine-specific methods, use API calls to download 3d models
+from the internet and place them into the scene, and assign state trees of behavior and animations to them (Huang et al.,
+2023a). This behavior likely emerges due to the presence of similar code in open source game repositories that use
+Unity. Therefore, GPT models are capable of building rich visual scenes in terms of loading in many objects into the
+scene from a simple user prompt.
+The aim of this category of agents is to build a platform and a set of tools that provide an efficient interface between
+large AI models (both GPT-family ones as well as diffusion image models) and a rendering engine. We explore two
+primary avenues here:
+• Integration of large models into the various editor tools in the agent infrastructure, allowing for significant
+speedups in development.
+• Controlling the rendering engine from within a user experience, by generating code that follows user instruction
+and then compiling it at runtime, allowing for users to potentially edit the VR/simulation they are interacting
+with in arbitrary ways, even by introducing new agent mechanics.
+Introducing an AI copilot focused on XR settings would be useful for XR creators, who can use the copilot to complete
+tedious tasks, like providing simple assets or writing code boilerplate, freeing creators to focus on their creative vision
+and quickly iterate on ideas.
+Furthermore, agents can help users interactively modify the environment by adding new assets, changing the dynamics
+of the environment, or building new settings. This form of dynamic generation during runtime can also be specified by
+a creator, enabling the user’s experience to feel fresh and continue evolving over time.
+
+5.5 Knowledge and Logical Inference Agents
+The capacity to infer and apply knowledge is a defining feature of human cognition, particularly evident in complex
+tasks such as logical deduction, and understanding theory of mind 3
+. Making inferences on knowledge ensures that
+the AI’s responses and actions are consistent with known facts and logical principles. This coherence is a crucial
+mechanism for maintaining trust and reliability in AI systems, especially in critical applications like medical diagnosis
+or legal analysis. Here, we introduce agents that incorporate the interplay between knowledge and inference that address
+specific facets of intelligence and reasoning.
+
+5.5.1 Knowledge Agent
+Knowledge Agents reason over their acquired knowledge systems in two directions: implicit and explicit. Implicit
+knowledge is typically what large-scale language models like the GPT series (Brown et al., 2020; OpenAI, 2023)
+encapsulate after being trained on vast amounts of text data. These models can generate responses that give the
+impression of understanding, as they draw on patterns and information implicitly learned during training. Explicit
+knowledge, conversely, is structured and can be directly queried, such as the information found in knowledge bases
+or databases, which was traditionally used to enhance AI reasoning capabilities by referencing verifiable external
+resources.
+Despite the advancements in language models, their implicit knowledge is static and becomes outdated as the world
+evolves (Lewis et al., 2020; Peng et al., 2023). This limitation necessitates the integration of explicit knowledge sources
+that are updated continuously, ensuring that AI systems can provide accurate and current responses. The fusion of
+implicit and explicit knowledge equips AI agents with a more nuanced understanding and the ability to apply knowledge
+contextually, akin to human intelligence (Gao et al., 2022). Such integration is crucial for crafting knowledge-centric AI
+agents that not only possess information but can also understand, explain, and employ it, thereby narrowing the chasm
+between extensive learning and profound knowledge (Marcus and Davis, 2019; Gao et al., 2020). These agents are
+designed to reason with flexibility and dynamic information about the world, enhancing their robustness and adaptability
+(Marcus, 2020).
+
+5.5.2 Logic Agents
+Generally, a logic agent is a component of a system designed to apply logical reasoning to process data or solve tasks
+specific to logical inference or logical reasoning. Logic agents within the context of large foundation models like GPT-4
+refers to a specialized component or submodules designed to handle logical reasoning tasks. These tasks often involve
+understanding and manipulating abstract concepts, deducing conclusions from given premises, or solving problems
+that require a structured, logical approach. Broadly, foundation models like GPT-4 are trained on a vast corpus of text
+data and learn to perform a wide range of tasks, including those that require some form of logical reasoning. Thus,
+their capability for logical reasoning is integrated into the overall architecture, and they generally do not possess a
+distinct, isolated "Logic agent". While GPT-4 and similar models can perform tasks that involve logic, their approach
+is fundamentally different from how humans or traditional logic-based systems operate. They do not follow formal
+logical rules or have an explicit understanding of logic; rather, they generate responses based on patterns learned from
+the training data. As a result, their performance in logical tasks can be impressive, but it can also be inconsistent or
+limited by the nature of the training data and the inherent limitations of the model’s design. One example of embedding
+a separate logical submodule into the architecture is (Wang et al., 2023e), which modifies the token embedding process
+used by LLMs during pre-training by parsing text into logical segments and explicitly modeling logical hierarchies in
+the token embeddings.
+
+5.5.3 Agents for Emotional Reasoning
+Emotional understanding and empathy are important skills for agents in many human-machine interactions. To illustrate,
+one important goal for creating engaging dialogue agents is to have the agents act with increased emotion and empathy
+while minimizing socially inappropriate or offensive outputs. To advance towards this goal for dialogue agents, we
+released the Neural Image Commenting with Empathy (NICE) dataset (Chen et al., 2021) consisting of almost two
+million images and the corresponding human-generated comments and a set of human emotion annotations. We also
+provided a novel pre-training model - Modeling Affect Gneration for Image Comments (MAGIC) (Chen et al., 2021) -
+which aims to generate comments for images, conditioned on linguistic representations that capture style and affect, and
+to help generate more empathetic, emotional, engaging and socially appropriate comments. Our experiments show that
+the approach is effective in training a more human-like and engaging image comment agent. Developing empathy-aware
+agents is a promising direction for interactive agents, and it is important to create agents with emotional understanding
+capabilities across a wide range of groups and populations, especially considering that many current language models
+exhibit bias in their emotional understanding and empathetic reasoning capabilities (Mao et al., 2022; Wake et al.,
+2023d).
+
+5.5.4 Neuro-Symbolic Agents
+Neuro-Symbolic agents operate on a hybrid system of neurons and symbols (d’Avila Garcez and Lamb, 2020). To solve
+problems stated in natural language is a challenging task because it requires explicitly capturing discrete symbolic
+structural information implicit in the input. However, most general neural sequence models do not explicitly capture
+such structural information, limiting their performance on these tasks. The work (Chen et al., 2020) propose a new
+encoder-decoder model based on a structured neural representation agent, The encoder of TP-N2F employs TPR
+‘binding’ to encode natural-language symbolic structure in vector space and the decoder uses TPR ‘unbinding’ to
+generate, in symbolic space, a sequential program represented by relational tuples, each consisting of a relation (or
+operation) and a number of arguments.
+Instruction following vision-language (VL) models like GPT-4 offer a flexible interface that supports a broad range
+of multimodal tasks in a zero-shot fashion. However, interfaces that operate on full images do not directly enable
+the user to “point to” and access specific regions within images. This capability is important not only to support
+reference-grounded VL benchmarks, but also, for practical applications that require precise within-image reasoning.
+In (Park et al., 2023b), we build Localized Visual Commonsense model which allows users to specify (multiple)
+regions-as-input. We train our model by sampling localized commonsense knowledge from a large language model
+(LLM): specifically, we prompt a LLM to collect common sense knowledge given a global literal image description and
+a local literal region description automatically generated by a set of VL models. This pipeline is scalable and fully
+automatic, as no aligned or human-authored image and text pairs are required. With a separately trained critic model
+that selects high quality examples, we find that training on the localized commonsense corpus expanded solely from
+images can successfully distill existing VL models to support a reference-as-input interface. Empirical results and
+human evaluations in zero-shot settings demonstrate that our distillation method results in more precise VL models of
+reasoning compared to a baseline of passing a generated referring expression.
+
+5.6 LLMs and VLMs Agent
+A number of works leverage LLMs as agents to perform task planning (Huang et al., 2022a; Wang et al., 2023b;
+Yao et al., 2023a; Li et al., 2023a), and leverage the LLMs’ large internet-scale domain knowledge and zero-shot
+planning abilities to perform agentic tasks like planning and reasoning. Recent robotics research also leverages LLMs
+to perform task planning (Ahn et al., 2022a; Huang et al., 2022b; Liang et al., 2022) by decomposing natural language
+instruction into a sequence of subtasks, either in the natural language form or in Python code , then using a low-level
+controller to execute these subtasks. Additionally, (Huang et al., 2022b), (Liang et al., 2022), and (Wang et al., 2023a)
+also incorporate environmental feedback to improve task performance. There have also been a number of works that
+demonstrate the ability of general-purpose visually-aligned large language models trained on large-scale text, image,
+and video data to serve as a foundation for creating multi-modal agents that are embodied and can act in various
+environments (Baker et al., 2022; Driess et al., 2023; Brohan et al., 2023).
